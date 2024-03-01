@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .container {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        border: 10px solid greenyellow;
+      }
+      .menu-table {
+        width: 100px;
+        height: 50px;
+        border: 3px solid green;
+      }
+
+      .td1,
+      .td2 {
+        border: 2px dotted purple;
+      }
+      .animated {
+        position: fixed;
+        top: 0;
+        right: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <table class="menu-table">
+        <tr class="tr1">
+          <td class="td1">tr1</td>
+          <td class="td2" onclick="animeCell(this)">tr2</td>
+        </tr>
+      </table>
+    </div>
+    <script src="lib/anime.min.js"></script>
+    <script>
+      const animeRow = anime({
+        targets: ".tr1",
+        translateX: 200,
+        duration: 1000,
+        delay: 2000,
+      });
+
+      function animeCell(target) {
+        anime({
+          targets: target,
+          translateX: 200,
+          direction: "alternate",
+          complete: function () {
+            target.classList.add("animated");
+          },
+        });
+      }
+    </script>
+  </body>
+</html>
