@@ -59,17 +59,17 @@
         .add({
           targets: ".t2r1",
           translateX: 200,
-          duration: 1000,
-          delay: 2000,
+          duration: 500,
+          delay: 500,
         })
         .add({
           targets: ".t2d2",
           translateX: 200,
           direction: "alternate",
-          complete: function () {
-            document.querySelector(".t2d2").classList.add("animated");
-          },
-        });
+        })
+        .finished.then(() =>
+          document.querySelector(".t2d2").classList.add("animated")
+        );
     </script>
   </body>
 </html>
