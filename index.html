@@ -54,22 +54,18 @@
     </div>
     <script src="lib/anime.min.js"></script>
     <script>
-      anime
+      const a = anime
         .timeline()
         .add({
           targets: ".t2r1",
-          translateX: 200,
-          duration: 500,
-          delay: 500,
+          translateX: [0, 200, 0],
+          duration: 4000,
         })
         .add({
           targets: ".t2d2",
-          translateX: 200,
-          direction: "alternate",
-        })
-        .finished.then(() =>
-          document.querySelector(".t2d2").classList.add("animated")
-        );
+          translateX: [0, 500, 0],
+          duration: 4000,
+        });
     </script>
   </body>
 </html>
