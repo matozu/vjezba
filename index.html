@@ -3,69 +3,146 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Vertical Menu with Divs</title>
     <style>
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
       }
+
+      body {
+        overflow: hidden;
+      }
+
       .container {
         position: relative;
-        width: 100vw;
-        height: 100vh;
-        border: 10px solid greenyellow;
-      }
-      .table {
-        width: 100px;
-        height: 50px;
-        border: 3px solid green;
-        margin: 10px;
+        width: calc(100vw - 11px);
+        height: calc(100vh - 11px);
+        border: 6px solid goldenrod;
       }
 
-      .t1d1,
-      .t1d2,
-      .t2d1,
-      .t2d2 {
-        border: 2px dotted purple;
+      .menu-container {
+        border: 5px dotted black;
+        width: calc(100vw - 20px - 20%);
+        height: calc(100vh - 20px);
+        margin-left: 20%;
       }
 
-      .animated {
-        position: fixed;
-        top: 0;
-        right: 0;
+      .menu {
+        border: 2px solid blue;
+        display: flex;
+        height: 30px;
+      }
+
+      .link {
+        background-color: olive;
+        width: fit-content;
+      }
+
+      .content {
+        background-color: gray;
+        flex-basis: 100%;
+        transform: scale(0);
+      }
+      .content span {
+        display: none;
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <table class="table">
-        <tr>
-          <td class="t1d1">t1d1</td>
-          <td class="t1d2 animated">t1d2</td>
-        </tr>
-      </table>
-      <table class="table">
-        <tr class="t2r1">
-          <td class="t2d1">t2d1</td>
-          <td class="t2d2">t2d2</td>
-        </tr>
-      </table>
+      <div class="menu-container">
+        <div class="menu-home menu">
+          <a
+            href="#"
+            class="home-link link"
+            onclick="animateDiv('.home-content')"
+            >Home</a
+          >
+          <div class="home-content content"><span>home content</span></div>
+        </div>
+
+        <div class="menu-shop menu">
+          <a
+            href="#"
+            class="shop-link link"
+            onclick="animateDiv('.shop-content')"
+            >shop</a
+          >
+          <div class="shop-content content"><span>shop content</span></div>
+        </div>
+
+        <div class="menu-about menu">
+          <a
+            href="#"
+            class="about-link link"
+            onclick="animateDiv('.about-content')"
+            >about</a
+          >
+          <div class="about-content content"><span>about content</span></div>
+        </div>
+      </div>
     </div>
     <script src="lib/anime.min.js"></script>
     <script>
-      const a = anime
-        .timeline()
-        .add({
-          targets: ".t2r1",
-          translateX: [0, 200, 0],
-          duration: 4000,
-        })
-        .add({
-          targets: ".t2d2",
-          translateX: [0, 500, 0],
-          duration: 4000,
-        });
+      var displayed = "";
+      var animeInProgress = false;
+
+      function animateDiv(target) {
+        let d = displayed;
+        if (displayed !== "") {
+          animeContent(displayed, "reverse").finished.then(() =>
+            animeContent(target, "normal")
+          );
+        } else if (target !== d) animeContent(target, "normal");
+      }
+
+      function animeContent(target, dire) {
+        if (!animeInProgress) {
+          animeInProgress = true;
+          const a = anime.timeline();
+          a.autoplay = false;
+          if (dire === "normal") {
+            a.add({
+              targets: target,
+              marginLeft: [0, 30],
+              flexBasis: [0, "90%"],
+              scaleY: [0, 0.1],
+              scaleX: [0, 1],
+              translateX: ["-100%", 0],
+              opacity: [0, 1],
+              duration: 800,
+              easing: "easeInOutQuad",
+            }).add({
+              targets: target,
+              scaleY: [0.1, 1],
+              duration: 800,
+              easing: "easeInOutQuad",
+            });
+          } else if (dire === "reverse") {
+            a.add({
+              targets: target,
+              scale: [1, 0],
+              opacity: [1, 0],
+            });
+          }
+
+          a.direction = dire;
+          a.play();
+
+          a.finished.then(() => {
+            if (a.direction === "normal") displayed = target;
+            else {
+              displayed = "";
+              document.querySelector(target).style = {};
+            }
+            animeInProgress = false;
+          });
+
+          return a;
+        }
+      }
     </script>
   </body>
 </html>
